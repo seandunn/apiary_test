@@ -1,0 +1,158 @@
+HOST: http://api.sanger.ac.uk/
+
+--- Sequencescape & S2 API ---
+---
+[Sequencescape](http://github.com/sanger/sequencescape) and [S2](http://github.com/sanger/lims-api) both support, as near as possible, identical
+RESTful JSON based APIs.  Typically clients access the root (`/`) of a server and are given back information about all "actions" that they can
+perform.  We always try to talk in terms of actions, rather than URLs, in order to discourage people from assuming the format of the URLs will
+be inferrable, or stable.
+---
+
+--
+Root JSON
+Clients need only know about the root URL (`/`), and can assume that UUIDs can be used directly, to access the entire scope of the Sequencescape
+or S2 system.
+--
+When not authenticated you get only those resources that are publicly accessible.
+GET /
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+    "plate": {
+        "actions": {
+            "read": "/plates"
+        }
+    }
+}
+
+When logged in you may get a different set of resources, and actions, based on your permissions.
+GET /
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+    "plate": {
+        "actions": {
+            "read": "/plates",
+            "create": "/plates"
+        }
+    },
+    "order": {
+        "actions": {
+            "read": "/orders"
+            "create": "/orders"
+        }
+    }
+}
+
+--
+Plates
+Plates are a core labware concept, representing a piece of plastic that has a number of wells arranged in rows and columns to form a grid.  Wells
+of a plate can hold a number of aliquots, and each aliquot represents a uniquely identified piece of sample material.
+--
+Reading all plates returns only the first page of results.  Here, `size` gives the total number of results, not the number present on the page
+being returned.
+GET /plates
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+    "actions": {
+        "read": "/plates",
+        "first": "/plates",
+        "next": "/plates?page=2",
+        "last": "/plates?page=3"
+    },
+    "size": 100,
+    "plates": [
+        {
+            "actions": {
+                "read": "/00000000-1111-2222-3333-444444444444"
+            },
+            "uuid": "00000000-1111-2222-3333-444444444444"
+        }
+    ]
+}
+
+Reading the last page of plates.  Notice that there is no `next`, but there is a `previous`, action for the page.
+GET /plates?page=3
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+    "actions": {
+        "read": "/plates?page=3",
+        "first": "/plates",
+        "previous": "/plates?page=2",
+        "last": "/plates?page=3"
+    },
+    "size": 100,
+    "plates": [
+        {
+            "actions": {
+                "read": "/00000000-1111-2222-3333-444444444445"
+            },
+            "uuid": "00000000-1111-2222-3333-444444444445"
+        }
+    ]
+}
+
+Reading an individual plate is as simple as a `GET` to the UUID of the plate:
+GET /00000000-1111-2222-3333-444444444445
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+    "actions": {
+        "read": "/00000000-1111-2222-3333-444444444445"
+    },
+    "uuid": "/00000000-1111-2222-3333-444444444445",
+    "wells": {
+        "A1": [{"sample": {"actions": { }}}]
+    }    
+}
+
+
+Creating a plate.
+POST /plates
+> Accept: application/json
+> Content-Type: application/json
+{
+    "plate": {
+        "number_of_rows": 8,
+        "number_of_columns": 12,
+        "well_descriptions": {
+            "A1": [{ "sample": "11111111-2222-3333-4444-000000000000" }],
+            "H12": [{ "sample": "11111111-2222-3333-4444-000000000001" }]
+        }
+    }
+}
+< 201
+< Content-Type: application/json
+{
+    "plate": {
+        "actions": {
+            "read": "/00000000-1111-2222-3333-444444444444"
+        },
+        "uuid": "00000000-1111-2222-3333-444444444444",
+        "wells": {
+            "A1": [{
+                "sample": {
+                    "actions": {
+                        "read": "/11111111-2222-3333-4444-000000000000"
+                    },
+                    "uuid": "11111111-2222-3333-4444-000000000000"
+                }
+            }],
+            "H12": [{
+                "sample": {
+                    "actions": {
+                        "read": "/11111111-2222-3333-4444-000000000001"
+                    },
+                    "uuid": "11111111-2222-3333-4444-000000000001"
+                }
+            }]
+        }
+    }
+}
