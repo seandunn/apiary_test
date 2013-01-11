@@ -1,159 +1,64 @@
 HOST: http://api.sanger.ac.uk/
 
---- Sequencescape & S2 API ---
+--- Candidate test
 ---
-[Sequencescape](http://github.com/sanger/sequencescape) and [S2](http://github.com/sanger/lims-api) both support, as near as possible, identical
-RESTful JSON based APIs.  Typically clients access the root (`/`) of a server and are given back information about all "actions" that they can
-perform.  We always try to talk in terms of actions, rather than URLs, in order to discourage people from assuming the format of the URLs will
-be inferrable, or stable.
+Our [S2](http://github.com/sanger/lims-api) application supports, as near as possible, a RESTful JSON based API.  The API enables client applications to
+only assume that they can access the root URL (`/`), with all other URLs being returned as an action within the JSON; a small concession is made for
+clients that already know a UUID, in that they can access that directly, i.e. if the client knows the UUID of a tube is
+`00000000-1111-2222-3333-444444444444`, then they are free to access the URL `/00000000-1111-2222-3333-444444444444` for the tube JSON directly.
+
+This document describes the API and provides a [mock server](http://mattdenner.apiary.io) that you can connect to in order to complete the candidate test.
+
+Your task is to implement a user interface that will enable a lab technician to record a tube-to-tube transfer.  Here is the behaviour required:
+
+The lab technician needs to be able to scan in the barcode of a tube and have it be displayed on the screen.  Tubes that are empty should appear visually
+different to those that have content in them.
+
+The technician can then start a transfer between this source tube and a second target tube.  Starting the transfer should register a new tube in the
+system, displaying it on the screen so that the technician can print out the barcode, but does not affect the contents of either tube.  It is only when
+the technician finishes transferring the content from the source to the target tube, that they need to be able to record how much they transferred.
+
+The mock server is configured to assume the following:
+
+1. The source tube barcode is `SRC1234567`;
+2. The target tube barcode is `TRG1234567`;
+3. The volume tranferred from source to target tube is `100%`.
+
+Do not hardcode these values into your solution as we will run your code against a system that is not bound by these restrictions.  Simply know that
+these values are *all* that the mock server will respond to.  Also note that the barcodes are *not* UUIDs.
+
+The interface should be implemented as a single HTML5 file, supported by Javascript: there is no CGI or server support available.  You can use any
+Javascript framework you feel comfortable with, but you must not hardcode or assume the format of any URLs other than the root URL (`/`).
 ---
 
---
+---
 Root JSON
-Clients need only know about the root URL (`/`), and can assume that UUIDs can be used directly, to access the entire scope of the Sequencescape
-or S2 system.
---
-When not authenticated you get only those resources that are publicly accessible.
+Clients of the API need only know about the root URL (`/`), all other URLs come from the JSON returned in responses.
+---
 GET /
 > Accept: application/json
 < 200
 < Content-Type: application/json
 {
-    "plate": {
-        "actions": {
-            "read": "/plates"
-        }
-    }
-}
-
-When logged in you may get a different set of resources, and actions, based on your permissions.
-GET /
-> Accept: application/json
-< 200
-< Content-Type: application/json
-{
-    "plate": {
-        "actions": {
-            "read": "/plates",
-            "create": "/plates"
-        }
-    },
-    "order": {
-        "actions": {
-            "read": "/orders"
-            "create": "/orders"
-        }
-    }
-}
-
---
-Plates
-Plates are a core labware concept, representing a piece of plastic that has a number of wells arranged in rows and columns to form a grid.  Wells
-of a plate can hold a number of aliquots, and each aliquot represents a uniquely identified piece of sample material.
---
-Reading all plates returns only the first page of results.  Here, `size` gives the total number of results, not the number present on the page
-being returned.
-GET /plates
-> Accept: application/json
-< 200
-< Content-Type: application/json
-{
+  "tube": {
     "actions": {
-        "read": "/plates",
-        "first": "/plates",
-        "next": "/plates?page=2",
-        "last": "/plates?page=3"
-    },
-    "size": 100,
-    "plates": [
-        {
-            "actions": {
-                "read": "/00000000-1111-2222-3333-444444444444"
-            },
-            "uuid": "00000000-1111-2222-3333-444444444444"
-        }
-    ]
-}
-
-Reading the last page of plates.  Notice that there is no `next`, but there is a `previous`, action for the page.
-GET /plates?page=3
-> Accept: application/json
-< 200
-< Content-Type: application/json
-{
-    "actions": {
-        "read": "/plates?page=3",
-        "first": "/plates",
-        "previous": "/plates?page=2",
-        "last": "/plates?page=3"
-    },
-    "size": 100,
-    "plates": [
-        {
-            "actions": {
-                "read": "/00000000-1111-2222-3333-444444444445"
-            },
-            "uuid": "00000000-1111-2222-3333-444444444445"
-        }
-    ]
-}
-
-Reading an individual plate is as simple as a `GET` to the UUID of the plate:
-GET /00000000-1111-2222-3333-444444444445
-> Accept: application/json
-< 200
-< Content-Type: application/json
-{
-    "actions": {
-        "read": "/00000000-1111-2222-3333-444444444445"
-    },
-    "uuid": "/00000000-1111-2222-3333-444444444445",
-    "wells": {
-        "A1": [{"sample": {"actions": { }}}]
-    }    
-}
-
-
-Creating a plate.
-POST /plates
-> Accept: application/json
-> Content-Type: application/json
-{
-    "plate": {
-        "number_of_rows": 8,
-        "number_of_columns": 12,
-        "well_descriptions": {
-            "A1": [{ "sample": "11111111-2222-3333-4444-000000000000" }],
-            "H12": [{ "sample": "11111111-2222-3333-4444-000000000001" }]
-        }
+      "create": "/tubes",
+      "read": "/tubes"
     }
-}
-< 201
-< Content-Type: application/json
-{
-    "plate": {
-        "actions": {
-            "read": "/00000000-1111-2222-3333-444444444444",
-            "update": "/00000000-1111-2222-3333-444444444444"
-        },
-        "uuid": "00000000-1111-2222-3333-444444444444",
-        "wells": {
-            "A1": [{
-                "sample": {
-                    "actions": {
-                        "read": "/11111111-2222-3333-4444-000000000000"
-                    },
-                    "uuid": "11111111-2222-3333-4444-000000000000"
-                }
-            }],
-            "H12": [{
-                "sample": {
-                    "actions": {
-                        "read": "/11111111-2222-3333-4444-000000000001"
-                    },
-                    "uuid": "11111111-2222-3333-4444-000000000001"
-                }
-            }]
-        }
+  },
+  "search": {
+    "actions": {
+      "create": "/search"
     }
+  },
+  "change_state": {
+    "actions": {
+      "create": "/change_state"
+    }
+  },
+  "transfer": {
+    "actions": {
+      "create": "/transfer"
+    }
+  }
 }
