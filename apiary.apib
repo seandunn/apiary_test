@@ -33,7 +33,15 @@ Javascript framework you feel comfortable with, but you must not hardcode or ass
 
 --
 Root JSON
-Clients of the API need only know about the root URL (`/`), all other URLs come from the JSON returned in responses.
+Clients of the API need only know about the root URL (`/`), all other URLs come from the JSON returned in responses.  There are potentially four actions
+that are available on resources:
+
+- `read` which responds to an HTTP GET and returns the JSON representation of the resource;
+- `create` which responds to an HTTP POST, with an optional body of JSON data, and creates a new resource;
+- `update` which responds to an HTTP PUT, with an optional body of JSON data, and updates an existing resource;
+- `delete` which responds to an HTTP DELETE by deleting the resource.
+
+At the root URL level, only `read` and `create` are typically available, as the others do not make sense in the context of *all* resources.
 --
 GET /
 > Accept: application/json
