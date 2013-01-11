@@ -94,23 +94,6 @@ GET /00000000-1111-2222-3333-000000000001
 }
 
 --
-GET /00000000-1111-2222-3333-000000000002
-> Accept: application/json
-< 200
-< Content-Type: application/json
-{
-  "tube": {
-    "actions": {
-      "read": "/00000000-1111-2222-3333-000000000002"
-    },
-    "uuid": "00000000-1111-2222-3333-000000000002",
-    "barcode": "TRG123456",
-    "state": "pending",
-    "aliquots": []
-  }
-}
-
---
 Changing state of tubes
 
 --
@@ -134,5 +117,30 @@ POST /change_state
       }
     },
     "target_state": "started"
+  }
+}
+
+
+--- Extra support
+---
+What follows are purely needed to manage the state of the system.  If you have followed the advice, and not hardcoded or assumed URL structure, then you
+will not need to pass this point and everything you need is documented above.
+---
+
+--
+--
+GET /00000000-1111-2222-3333-000000000002
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-2222-3333-000000000002"
+    },
+    "uuid": "00000000-1111-2222-3333-000000000002",
+    "barcode": "TRG123456",
+    "state": "pending",
+    "aliquots": []
   }
 }
