@@ -94,6 +94,34 @@ GET /00000000-1111-2222-3333-000000000001
 }
 
 --
+Searching for tubes by barcode
+
+--
+POST /search
+> Accept: application/json
+{
+  "search": {
+    "barcode": "SRC123456"
+  }
+}
+< 301
+< Location: /00000000-1111-2222-3333-000000000001
+< Content-Type: application/json
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-2222-3333-000000000001"
+    },
+    "uuid": "00000000-1111-2222-3333-000000000001",
+    "barcode": "SRC123456",
+    "state": "done",
+    "aliquots": [
+      { "sample": "sample 1", "amount": 200 }
+    ]
+  }
+}
+
+--
 Changing state of tubes
 
 --
