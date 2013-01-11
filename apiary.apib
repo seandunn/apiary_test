@@ -20,8 +20,8 @@ the technician finishes transferring the content from the source to the target t
 
 The mock server is configured to assume the following:
 
-1. The source tube barcode is `SRC1234567`;
-2. The target tube barcode is `TRG1234567`;
+1. The source tube barcode is `SRC123456`;
+2. The target tube barcode is `TRG123456`;
 3. The volume tranferred from source to target tube is `100%`.
 
 Do not hardcode these values into your solution as we will run your code against a system that is not bound by these restrictions.  Simply know that
@@ -68,5 +68,68 @@ GET /
     "actions": {
       "create": "/transfer"
     }
+  }
+}
+
+--
+Tubes
+
+GET /00000000-1111-2222-3333-000000000001
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-2222-3333-000000000001"
+    },
+    "uuid": "00000000-1111-2222-3333-000000000001",
+    "barcode": "SRC123456",
+    "state": "done",
+    "aliquots": [
+      { "sample": "sample 1", "amount": 200 }
+    ]
+  }
+}
+
+GET /00000000-1111-2222-3333-000000000002
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-2222-3333-000000000002"
+    },
+    "uuid": "00000000-1111-2222-3333-000000000002",
+    "barcode": "TRG123456",
+    "state": "pending",
+    "aliquots": []
+  }
+}
+
+--
+Changing state of tubes
+
+POST /change_state
+> Accept: application/json
+{
+  "change_state": {
+    "target": "00000000-1111-2222-3333-000000000002",
+    "target_state": "started"
+  }
+}
+< 201
+< Content-Type: application/json
+{
+  "change_state": {
+    "actions": {
+    },
+    "target": {
+      "actions": {
+        "read": "/00000000-1111-2222-3333-000000000002"
+      }
+    },
+    "target_state": "started"
   }
 }
