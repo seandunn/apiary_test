@@ -242,6 +242,53 @@ POST /00000000-1111-0000-0000-000000000002/change_state
 }
 
 --
+Transferring between tubes
+Transfers from a source tube to a target tube involve using the `transfer` action of the source tube, passing
+the UUID of the target tube and the amount of material to be transferred.  The response body contains the transfer
+that was made.  The amount is considered to be applied across all aliquots, i.e. if there are 2 aliquots, each with
+an amount of 100, and the transfer is for 75, then both aliquots will be reduced to 25.  If all of the content is
+transferred then the source tube will have no aliquots, not an aliquot with a zero amount.
+--
+POST /00000000-1111-0000-0000-000000000001/transfer
+> Accept: application/json
+> Content-type: application/json
+{
+  "transfer": {
+    "target": "00000000-1111-0000-0000-000000000004",
+    "amount": 100
+  }
+}
+< 201
+< Content-Type: application/json
+{
+  "transfer": {
+    "source": {
+      "actions": {
+        "read": "/00000000-1111-0000-0000-0000000000003",
+        "transfer": "/00000000-1111-0000-0000-0000000000003/transfer",
+        "change_state": "/00000000-1111-0000-0000-0000000000003/change_state"
+      },
+      "barcode": "SRC123456",
+      "state": "done",
+      "aliquots": [ ]
+    },
+    "target": {
+      "actions": {
+        "read": "/00000000-1111-0000-0000-0000000000005",
+        "transfer": "/00000000-1111-0000-0000-0000000000005/transfer",
+        "change_state": "/00000000-1111-0000-0000-0000000000005/change_state"
+      },
+      "barcode": "TRG123456",
+      "state": "started",
+      "aliquots": [
+        { "sample": "sample 1", "amount": 100 }
+      ]
+    },
+    "amount": 100
+  }
+}
+
+--
 Extra stuff
 You should not care about anything in this section, as it is here purely to enable the mock server to respond appropriately.
 --
