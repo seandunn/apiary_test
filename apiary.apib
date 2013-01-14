@@ -242,32 +242,6 @@ POST /00000000-1111-0000-0000-000000000002/change_state
 }
 
 --
-POST /00000000-1111-0000-0000-000000000005/change_state
-> Accept: application/json
-> Content-type: application/json
-{
-  "change_state": {
-    "target": "done"
-  }
-}
-< 200
-< Content-Type: application/json
-{
-  "tube": {
-    "actions": {
-      "read": "/00000000-1111-0000-0000-0000000000006",
-      "transfer": "/00000000-1111-0000-0000-0000000000006/transfer",
-      "change_state": "/00000000-1111-0000-0000-0000000000006/change_state"
-    },
-    "barcode": "TRG123456",
-    "state": "done",
-    "aliquots": [
-      { "sample": "sample 1", "amount": 100 }
-    ]
-  }
-}
-
---
 Extra stuff
 You should not care about anything in this section, as it is here purely to enable the mock server to respond appropriately.
 --
@@ -367,3 +341,31 @@ GET /00000000-1111-0000-0000-000000000006
     ]
   }
 }
+
+--
+--
+POST /00000000-1111-0000-0000-000000000005/change_state
+> Accept: application/json
+> Content-type: application/json
+{
+  "change_state": {
+    "target": "done"
+  }
+}
+< 200
+< Content-Type: application/json
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-0000-0000-0000000000006",
+      "transfer": "/00000000-1111-0000-0000-0000000000006/transfer",
+      "change_state": "/00000000-1111-0000-0000-0000000000006/change_state"
+    },
+    "barcode": "TRG123456",
+    "state": "done",
+    "aliquots": [
+      { "sample": "sample 1", "amount": 100 }
+    ]
+  }
+}
+
