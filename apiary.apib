@@ -71,7 +71,9 @@ POST /search/first
 --
 Searching for a tube that does not exist
 If a singular search does not find a match then a not found error is returned, and the body of the response contains details of any
-error messages from the system
+error messages from the system.
+
+**NOTE:** The mock server does not respond to this error, ever!
 --
 POST /search/first
 > Accept: application/json
@@ -99,7 +101,8 @@ element that describes the paging.  The actions that might be present are:
 * `first` and `last` are URLs for the first and last page of results, which may be the same for only one page;
 * `next` and `previous` are URLs for the next and previous page, should the current page be one of may.
 
-In all cases, the `tubes` element is an array of tube entries, obeying the same JSON structure as an individual tube.
+In all cases, the `tubes` element is an array of tube entries, obeying the same JSON structure as an individual tube.  If there are no
+matches then, like the singular search, the response will be a not found error.
 --
 POST /search/all
 > Accept: application/json
