@@ -32,6 +32,22 @@ Javascript framework you feel comfortable with, but you must not hardcode or ass
 ---
 
 --
+Root
+The root URL (`/`) of the system always returns the initial set of behaviour.
+--
+GET /
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+  "search": {
+    "actions": {
+      "create": "/search"
+    }
+  }
+}
+
+--
 Tubes
 An individual tube has a representation that can be read and contains:
 
