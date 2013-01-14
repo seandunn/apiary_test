@@ -7,7 +7,10 @@ only assume that they can access the root URL (`/`), with all other URLs being r
 clients that already know a UUID, in that they can access that directly, i.e. if the client knows the UUID of a tube is
 `00000000-1111-2222-3333-444444444444`, then they are free to access the URL `/00000000-1111-2222-3333-444444444444` for the tube JSON directly.
 
-This document describes a similar API and provides a [mock server](http://mattdenner.apiary.io) that you can connect to in order to complete the candidate test.
+This document describes a similar API and provides a [mock server](http://mattdenner.apiary.io) that you can connect to in order to complete the candidate
+test.  However, note that the resources in this system can be considered to be unique in time: that is, changing the data for a resource may change the
+UUID, or any of the action URLs, associated with it.  Hence, you are **strongly advised** to only use data returned from the responses in order to flow to
+the next step of your code, and certainly **discouraged from hardcoding any URLs**, or making any assumptions about their structure.
 
 Your task is to implement a user interface that will enable a lab technician to record a tube-to-tube transfer.  Here is the behaviour required:
 
@@ -23,9 +26,6 @@ The mock server is configured to assume the following:
 1. The source tube barcode is `SRC123456`;
 2. The target tube barcode is `TRG123456`;
 3. The volume tranferred from source to target tube is `100%`.
-
-Do not hardcode these values into your solution as we will run your code against a system that is not bound by these restrictions.  Simply know that
-these values are *all* that the mock server will respond to.  Also note that the barcodes are *not* UUIDs.
 
 The interface should be implemented as a single HTML5 file, supported by Javascript: there is no CGI or server support available.  You can use any
 Javascript framework you feel comfortable with, but you must not hardcode or assume the format of any URLs other than the root URL (`/`).
