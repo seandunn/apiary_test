@@ -33,7 +33,19 @@ Javascript framework you feel comfortable with, but you must not hardcode or ass
 
 --
 Tubes
+An individual tube has a representation that can be read and contains:
 
+* `barcode` which is a unique barcode for the tube;
+* `state` which is an enumeration of 'pending', 'started' or 'done';
+* a number of aliquots that contain the name of a `sample` and the `amount` of that sample.
+
+All actions that can be performed on a tube are given in the `actions` block, including:
+
+* `read` which the URL to use to read the JSON representation of the tube;
+* `transfer` which is a URL for transferring from one tube to another;
+* `change_state` which is a URL for changing the state of a tube.
+
+Note that the URLs for the actions are unstable, and may change, and certain actions may not be always available.
 --
 GET /00000000-1111-0000-0000-000000000001
 > Accept: application/json
