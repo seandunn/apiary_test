@@ -171,6 +171,24 @@ GET /00000000-1111-2222-3333-000000000002
 
 --
 --
+GET /00000000-1111-2222-3333-000000000003
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-2222-3333-000000000003"
+    },
+    "uuid": "00000000-1111-2222-3333-000000000003",
+    "barcode": "SRC123456",
+    "state": "done",
+    "aliquots": []
+  }
+}
+
+--
+--
 GET /00000000-1111-2222-3333-000000000004
 > Accept: application/json
 < 200
@@ -184,6 +202,46 @@ GET /00000000-1111-2222-3333-000000000004
     "barcode": "TRG123456",
     "state": "started",
     "aliquots": []
+  }
+}
+
+--
+--
+GET /00000000-1111-2222-3333-000000000005
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-2222-3333-000000000005"
+    },
+    "uuid": "00000000-1111-2222-3333-000000000005",
+    "barcode": "TRG123456",
+    "state": "started",
+    "aliquots": [
+      { "sample": "sample 1", "amount": 200 }
+    ]
+  }
+}
+
+--
+--
+GET /00000000-1111-2222-3333-000000000006
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-2222-3333-000000000006"
+    },
+    "uuid": "00000000-1111-2222-3333-000000000006",
+    "barcode": "TRG123456",
+    "state": "done",
+    "aliquots": [
+      { "sample": "sample 1", "amount": 200 }
+    ]
   }
 }
 --
