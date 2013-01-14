@@ -94,7 +94,6 @@ GET /00000000-1111-0000-0000-000000000001
       "transfer": "/00000000-1111-0000-0000-0000000000001/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000001/change_state"
     },
-    "uuid": "00000000-1111-0000-0000-000000000001",
     "barcode": "SRC123456",
     "state": "done",
     "aliquots": [
@@ -182,7 +181,6 @@ POST /search/all
         "transfer": "/00000000-1111-0000-0000-0000000000001/transfer",
         "change_state": "/00000000-1111-0000-0000-0000000000001/change_state"
       },
-      "uuid": "00000000-1111-0000-0000-000000000001",
       "barcode": "SRC123456",
       "state": "done",
       "aliquots": [
@@ -209,10 +207,63 @@ POST /tubes
       "transfer": "/00000000-1111-0000-0000-0000000000002/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000002/change_state"
     },
-    "uuid": "00000000-1111-0000-0000-000000000002",
     "barcode": "TRG123456",
     "state": "pending",
     "aliquots": [ ]
+  }
+}
+
+--
+Changing the state of a tube
+To change the state of a tube involves using the `change_state` action on the tube, giving the target state
+that is required.
+--
+POST /00000000-1111-0000-0000-000000000002/change_state
+> Accept: application/json
+> Content-type: application/json
+{
+  "change_state": {
+    "target": "started"
+  }
+}
+< 200
+< Content-Type: application/json
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-0000-0000-0000000000004",
+      "transfer": "/00000000-1111-0000-0000-0000000000004/transfer",
+      "change_state": "/00000000-1111-0000-0000-0000000000004/change_state"
+    },
+    "barcode": "TRG123456",
+    "state": "started",
+    "aliquots": [ ]
+  }
+}
+
+--
+POST /00000000-1111-0000-0000-000000000005/change_state
+> Accept: application/json
+> Content-type: application/json
+{
+  "change_state": {
+    "target": "done"
+  }
+}
+< 200
+< Content-Type: application/json
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-0000-0000-0000000000006",
+      "transfer": "/00000000-1111-0000-0000-0000000000006/transfer",
+      "change_state": "/00000000-1111-0000-0000-0000000000006/change_state"
+    },
+    "barcode": "TRG123456",
+    "state": "done",
+    "aliquots": [
+      { "sample": "sample 1", "amount": 100 }
+    ]
   }
 }
 
@@ -231,7 +282,6 @@ GET /00000000-1111-0000-0000-000000000002
       "transfer": "/00000000-1111-0000-0000-0000000000002/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000002/change_state"
     },
-    "uuid": "00000000-1111-0000-0000-000000000002",
     "barcode": "TRG123456",
     "state": "pending",
     "aliquots": [ ]
@@ -251,7 +301,6 @@ GET /00000000-1111-0000-0000-000000000003
       "transfer": "/00000000-1111-0000-0000-0000000000003/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000003/change_state"
     },
-    "uuid": "00000000-1111-0000-0000-000000000003",
     "barcode": "SRC123456",
     "state": "done",
     "aliquots": [ ]
@@ -271,7 +320,6 @@ GET /00000000-1111-0000-0000-000000000004
       "transfer": "/00000000-1111-0000-0000-0000000000004/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000004/change_state"
     },
-    "uuid": "00000000-1111-0000-0000-000000000004",
     "barcode": "TRG123456",
     "state": "started",
     "aliquots": [ ]
@@ -291,7 +339,6 @@ GET /00000000-1111-0000-0000-000000000005
       "transfer": "/00000000-1111-0000-0000-0000000000005/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000005/change_state"
     },
-    "uuid": "00000000-1111-0000-0000-000000000005",
     "barcode": "TRG123456",
     "state": "started",
     "aliquots": [
@@ -313,7 +360,6 @@ GET /00000000-1111-0000-0000-000000000006
       "transfer": "/00000000-1111-0000-0000-0000000000006/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000006/change_state"
     },
-    "uuid": "00000000-1111-0000-0000-000000000006",
     "barcode": "TRG123456",
     "state": "done",
     "aliquots": [
