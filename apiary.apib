@@ -168,3 +168,20 @@ GET /00000000-1111-2222-3333-000000000002
     "aliquots": []
   }
 }
+--
+--
+GET /00000000-1111-2222-3333-000000000002
+> Accept: application/json
+< 200
+< Content-Type: application/json
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-2222-3333-000000000002"
+    },
+    "uuid": "00000000-1111-2222-3333-000000000002",
+    "barcode": "TRG123456",
+    "state": "pending",
+    "aliquots": []
+  }
+}
