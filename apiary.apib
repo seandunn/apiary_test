@@ -62,6 +62,7 @@ GET /
   },
   "tube": {
     "actions": {
+      "create": "/tubes"
     }
   }
 }
@@ -153,6 +154,28 @@ POST /search/all
       ]
     }
   ]
+}
+
+--
+Creating a tube
+--
+POST /tubes
+> Accept: application/json
+< 201
+< Content-Type: application/json
+< Location: /00000000-1111-0000-0000-000000000002
+{
+  "tube": {
+    "actions": {
+      "read": "/00000000-1111-0000-0000-0000000000002",
+      "transfer": "/00000000-1111-0000-0000-0000000000002/transfer",
+      "change_state": "/00000000-1111-0000-0000-0000000000002/change_state"
+    },
+    "uuid": "00000000-1111-0000-0000-000000000002",
+    "barcode": "TRG123456",
+    "state": "pending",
+    "aliquots": [ ]
+  }
 }
 
 --
