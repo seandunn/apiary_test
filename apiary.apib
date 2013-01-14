@@ -94,6 +94,7 @@ GET /00000000-1111-0000-0000-000000000001
       "transfer": "/00000000-1111-0000-0000-0000000000001/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000001/change_state"
     },
+    "uuid": "00000000-1111-0000-0000-000000000001",
     "barcode": "SRC123456",
     "state": "done",
     "aliquots": [
@@ -181,6 +182,7 @@ POST /search/all
         "transfer": "/00000000-1111-0000-0000-0000000000001/transfer",
         "change_state": "/00000000-1111-0000-0000-0000000000001/change_state"
       },
+      "uuid": "00000000-1111-0000-0000-000000000001",
       "barcode": "SRC123456",
       "state": "done",
       "aliquots": [
@@ -207,6 +209,7 @@ POST /tubes
       "transfer": "/00000000-1111-0000-0000-0000000000002/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000002/change_state"
     },
+    "uuid": "00000000-1111-0000-0000-000000000002",
     "barcode": "TRG123456",
     "state": "pending",
     "aliquots": [ ]
@@ -235,6 +238,7 @@ POST /00000000-1111-0000-0000-000000000002/change_state
       "transfer": "/00000000-1111-0000-0000-0000000000004/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000004/change_state"
     },
+    "uuid": "00000000-1111-0000-0000-000000000004",
     "barcode": "TRG123456",
     "state": "started",
     "aliquots": [ ]
@@ -245,9 +249,11 @@ POST /00000000-1111-0000-0000-000000000002/change_state
 Transferring between tubes
 Transfers from a source tube to a target tube involve using the `transfer` action of the source tube, passing
 the UUID of the target tube and the amount of material to be transferred.  The response body contains the transfer
-that was made.  The amount is considered to be applied across all aliquots, i.e. if there are 2 aliquots, each with
-an amount of 100, and the transfer is for 75, then both aliquots will be reduced to 25.  If all of the content is
-transferred then the source tube will have no aliquots, not an aliquot with a zero amount.
+that was made.
+
+The amount is considered to be applied across all aliquots, i.e. if there are 2 aliquots, each with an amount of
+100, and the transfer is for 75, then both aliquots will be reduced to 25.  If all of the content is transferred
+then the source tube will have no aliquots, not an aliquot with a zero amount.
 --
 POST /00000000-1111-0000-0000-000000000001/transfer
 > Accept: application/json
@@ -268,6 +274,7 @@ POST /00000000-1111-0000-0000-000000000001/transfer
         "transfer": "/00000000-1111-0000-0000-0000000000003/transfer",
         "change_state": "/00000000-1111-0000-0000-0000000000003/change_state"
       },
+      "uuid": "00000000-1111-0000-0000-000000000003",
       "barcode": "SRC123456",
       "state": "done",
       "aliquots": [ ]
@@ -278,6 +285,7 @@ POST /00000000-1111-0000-0000-000000000001/transfer
         "transfer": "/00000000-1111-0000-0000-0000000000005/transfer",
         "change_state": "/00000000-1111-0000-0000-0000000000005/change_state"
       },
+      "uuid": "00000000-1111-0000-0000-000000000005",
       "barcode": "TRG123456",
       "state": "started",
       "aliquots": [
@@ -303,6 +311,7 @@ GET /00000000-1111-0000-0000-000000000002
       "transfer": "/00000000-1111-0000-0000-0000000000002/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000002/change_state"
     },
+    "uuid": "00000000-1111-0000-0000-000000000002",
     "barcode": "TRG123456",
     "state": "pending",
     "aliquots": [ ]
@@ -322,6 +331,7 @@ GET /00000000-1111-0000-0000-000000000003
       "transfer": "/00000000-1111-0000-0000-0000000000003/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000003/change_state"
     },
+    "uuid": "00000000-1111-0000-0000-000000000003",
     "barcode": "SRC123456",
     "state": "done",
     "aliquots": [ ]
@@ -341,6 +351,7 @@ GET /00000000-1111-0000-0000-000000000004
       "transfer": "/00000000-1111-0000-0000-0000000000004/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000004/change_state"
     },
+    "uuid": "00000000-1111-0000-0000-000000000004",
     "barcode": "TRG123456",
     "state": "started",
     "aliquots": [ ]
@@ -360,6 +371,7 @@ GET /00000000-1111-0000-0000-000000000005
       "transfer": "/00000000-1111-0000-0000-0000000000005/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000005/change_state"
     },
+    "uuid": "00000000-1111-0000-0000-000000000005",
     "barcode": "TRG123456",
     "state": "started",
     "aliquots": [
@@ -381,6 +393,7 @@ GET /00000000-1111-0000-0000-000000000006
       "transfer": "/00000000-1111-0000-0000-0000000000006/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000006/change_state"
     },
+    "uuid": "00000000-1111-0000-0000-000000000006",
     "barcode": "TRG123456",
     "state": "done",
     "aliquots": [
@@ -408,6 +421,7 @@ POST /00000000-1111-0000-0000-000000000005/change_state
       "transfer": "/00000000-1111-0000-0000-0000000000006/transfer",
       "change_state": "/00000000-1111-0000-0000-0000000000006/change_state"
     },
+    "uuid": "00000000-1111-0000-0000-000000000006",
     "barcode": "TRG123456",
     "state": "done",
     "aliquots": [
