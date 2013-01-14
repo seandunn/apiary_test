@@ -33,7 +33,21 @@ Javascript framework you feel comfortable with, but you must not hardcode or ass
 
 --
 Root
-The root URL (`/`) of the system always returns the initial set of behaviour.
+The root URL (`/`) of the system always returns the initial set of behaviour.  Each of the entries in the root JSON can be considered a type of
+resource that is available, i.e. in the example there are "search" and "tube" resources.  There may be more than this, or less, and it must be assumed
+that the absence of a model means that this is not supported, i.e. if there is no "tube" resource type, then there are no tubes in the system.
+
+Each of the `actions` entries within a resource type gives the actions that the resource type itself responds to.  For instance, in the example the
+"search" resource type responds to `all` and `first`, which have semantics documented somewhere.  There are a set of standardised actions that may, or
+may not be present:
+
+* `read` which is the URL to read all instances of the resource type, in a paged fashion, via HTTP GET;
+* `create` which is the URL used to create an instance of the resource type, via HTTP POST;
+* `update` which is the URL used to update all instances of the resource type, via HTTP PUT or PATCH;
+* `delete` which is the URL used to delete all instances of the resource type, via HTTP DELETE.
+
+This association between these standard action names and their HTTP request method is maintained, even when viewing an individual resource, that will
+have its own set of actions.
 --
 GET /
 > Accept: application/json
@@ -44,6 +58,10 @@ GET /
     "actions": {
       "all": "/search/all",
       "first": "/search/first"
+    }
+  },
+  "tube": {
+    "actions": {
     }
   }
 }
