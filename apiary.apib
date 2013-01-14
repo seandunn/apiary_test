@@ -7,7 +7,7 @@ only assume that they can access the root URL (`/`), with all other URLs being r
 clients that already know a UUID, in that they can access that directly, i.e. if the client knows the UUID of a tube is
 `00000000-1111-2222-3333-444444444444`, then they are free to access the URL `/00000000-1111-2222-3333-444444444444` for the tube JSON directly.
 
-This document describes the API and provides a [mock server](http://mattdenner.apiary.io) that you can connect to in order to complete the candidate test.
+This document describes a similar API and provides a [mock server](http://mattdenner.apiary.io) that you can connect to in order to complete the candidate test.
 
 Your task is to implement a user interface that will enable a lab technician to record a tube-to-tube transfer.  Here is the behaviour required:
 
@@ -31,217 +31,132 @@ The interface should be implemented as a single HTML5 file, supported by Javascr
 Javascript framework you feel comfortable with, but you must not hardcode or assume the format of any URLs other than the root URL (`/`).
 ---
 
---
-Root JSON
-Clients of the API need only know about the root URL (`/`), all other URLs come from the JSON returned in responses.  There are potentially four actions
-that are available on resources:
-
-- `read` which responds to an HTTP GET and returns the JSON representation of the resource;
-- `create` which responds to an HTTP POST, with an optional body of JSON data, and creates a new resource;
-- `update` which responds to an HTTP PUT, with an optional body of JSON data, and updates an existing resource;
-- `delete` which responds to an HTTP DELETE by deleting the resource.
-
-At the root URL level, only `read` and `create` are typically available, as the others do not make sense in the context of *all* resources.
---
-GET /
-> Accept: application/json
-< 200
-< Content-Type: application/json
-{
-  "tube": {
-    "actions": {
-      "create": "/tubes",
-      "read": "/tubes"
-    }
-  },
-  "search": {
-    "actions": {
-      "create": "/search"
-    }
-  },
-  "change_state": {
-    "actions": {
-      "create": "/change_state"
-    }
-  },
-  "transfer": {
-    "actions": {
-      "create": "/transfer"
-    }
-  }
-}
 
 --
 Tubes
-
 --
-GET /00000000-1111-2222-3333-000000000001
+GET /00000000-1111-0000-0000-000000000001
 > Accept: application/json
 < 200
 < Content-Type: application/json
 {
   "tube": {
     "actions": {
-      "read": "/00000000-1111-2222-3333-000000000001"
+      "read": "/00000000-1111-0000-0000-0000000000001",
+      "transfer": "/00000000-1111-0000-0000-0000000000001/transfer",
+      "change_state": "/00000000-1111-0000-0000-0000000000001/change_state"
     },
-    "uuid": "00000000-1111-2222-3333-000000000001",
+    "uuid": "00000000-1111-0000-0000-000000000001",
     "barcode": "SRC123456",
     "state": "done",
     "aliquots": [
-      { "sample": "sample 1", "amount": 200 }
+      { "sample": "sample 1", "amount": 100 }
     ]
   }
 }
 
 --
-Searching for tubes by barcode
-
 --
-POST /search
-> Accept: application/json
-{
-  "search": {
-    "barcode": "SRC123456"
-  }
-}
-< 301
-< Location: /00000000-1111-2222-3333-000000000001
-< Content-Type: application/json
-{
-  "tube": {
-    "actions": {
-      "read": "/00000000-1111-2222-3333-000000000001"
-    },
-    "uuid": "00000000-1111-2222-3333-000000000001",
-    "barcode": "SRC123456",
-    "state": "done",
-    "aliquots": [
-      { "sample": "sample 1", "amount": 200 }
-    ]
-  }
-}
-
---
-Changing state of tubes
-
---
-POST /change_state
-> Accept: application/json
-{
-  "change_state": {
-    "target": "00000000-1111-2222-3333-000000000002",
-    "target_state": "started"
-  }
-}
-< 201
-< Content-Type: application/json
-{
-  "change_state": {
-    "actions": {
-    },
-    "target": {
-      "actions": {
-        "read": "/00000000-1111-2222-3333-000000000002"
-      }
-    },
-    "target_state": "started"
-  }
-}
-
---
-Extra support
-What follows are purely needed to manage the state of the system.  If you have followed the advice, and not hardcoded or assumed URL structure, then you
-will not need to pass this point and everything you need is documented above.
---
-GET /00000000-1111-2222-3333-000000000002
+GET /00000000-1111-0000-0000-000000000002
 > Accept: application/json
 < 200
 < Content-Type: application/json
 {
   "tube": {
     "actions": {
-      "read": "/00000000-1111-2222-3333-000000000002"
+      "read": "/00000000-1111-0000-0000-0000000000002",
+      "transfer": "/00000000-1111-0000-0000-0000000000002/transfer",
+      "change_state": "/00000000-1111-0000-0000-0000000000002/change_state"
     },
-    "uuid": "00000000-1111-2222-3333-000000000002",
+    "uuid": "00000000-1111-0000-0000-000000000002",
     "barcode": "TRG123456",
     "state": "pending",
-    "aliquots": []
+    "aliquots": [ ]
   }
 }
 
 --
 --
-GET /00000000-1111-2222-3333-000000000003
+GET /00000000-1111-0000-0000-000000000003
 > Accept: application/json
 < 200
 < Content-Type: application/json
 {
   "tube": {
     "actions": {
-      "read": "/00000000-1111-2222-3333-000000000003"
+      "read": "/00000000-1111-0000-0000-0000000000003",
+      "transfer": "/00000000-1111-0000-0000-0000000000003/transfer",
+      "change_state": "/00000000-1111-0000-0000-0000000000003/change_state"
     },
-    "uuid": "00000000-1111-2222-3333-000000000003",
+    "uuid": "00000000-1111-0000-0000-000000000003",
     "barcode": "SRC123456",
     "state": "done",
-    "aliquots": []
+    "aliquots": [ ]
   }
 }
 
 --
 --
-GET /00000000-1111-2222-3333-000000000004
+GET /00000000-1111-0000-0000-000000000004
 > Accept: application/json
 < 200
 < Content-Type: application/json
 {
   "tube": {
     "actions": {
-      "read": "/00000000-1111-2222-3333-000000000004"
+      "read": "/00000000-1111-0000-0000-0000000000004",
+      "transfer": "/00000000-1111-0000-0000-0000000000004/transfer",
+      "change_state": "/00000000-1111-0000-0000-0000000000004/change_state"
     },
-    "uuid": "00000000-1111-2222-3333-000000000004",
+    "uuid": "00000000-1111-0000-0000-000000000004",
     "barcode": "TRG123456",
     "state": "started",
-    "aliquots": []
+    "aliquots": [ ]
   }
 }
 
 --
 --
-GET /00000000-1111-2222-3333-000000000005
+GET /00000000-1111-0000-0000-000000000005
 > Accept: application/json
 < 200
 < Content-Type: application/json
 {
   "tube": {
     "actions": {
-      "read": "/00000000-1111-2222-3333-000000000005"
+      "read": "/00000000-1111-0000-0000-0000000000005",
+      "transfer": "/00000000-1111-0000-0000-0000000000005/transfer",
+      "change_state": "/00000000-1111-0000-0000-0000000000005/change_state"
     },
-    "uuid": "00000000-1111-2222-3333-000000000005",
+    "uuid": "00000000-1111-0000-0000-000000000005",
     "barcode": "TRG123456",
     "state": "started",
     "aliquots": [
-      { "sample": "sample 1", "amount": 200 }
+      { "sample": "sample 1", "amount": 100 }
     ]
   }
 }
 
 --
 --
-GET /00000000-1111-2222-3333-000000000006
+GET /00000000-1111-0000-0000-000000000006
 > Accept: application/json
 < 200
 < Content-Type: application/json
 {
   "tube": {
     "actions": {
-      "read": "/00000000-1111-2222-3333-000000000006"
+      "read": "/00000000-1111-0000-0000-0000000000006",
+      "transfer": "/00000000-1111-0000-0000-0000000000006/transfer",
+      "change_state": "/00000000-1111-0000-0000-0000000000006/change_state"
     },
-    "uuid": "00000000-1111-2222-3333-000000000006",
+    "uuid": "00000000-1111-0000-0000-000000000006",
     "barcode": "TRG123456",
     "state": "done",
     "aliquots": [
-      { "sample": "sample 1", "amount": 200 }
+      { "sample": "sample 1", "amount": 100 }
     ]
   }
 }
+
 --
