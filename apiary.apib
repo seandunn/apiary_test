@@ -25,9 +25,9 @@ The mock server is configured to assume the following:
 
 1. The source tube barcode is `SRC123456`;
 2. The target tube barcode is `TRG123456`;
-3. The volume tranferred from source to target tube is `100%`.
+3. The volume transferred from source to target tube is `100%`.
 
-The interface should be implemented as a single HTML5 file, supported by Javascript: there is no CGI or server support available.  You can use any
+The interface should be implemented as a single HTML5 file, supported by Javascript: there is no CGI or server support for logic available.  You can use any
 Javascript framework you feel comfortable with, but you must not hardcode or assume the format of any URLs other than the root URL (`/`).
 ---
 
@@ -160,6 +160,8 @@ element that describes the paging.  The actions that might be present are:
 * `read` which is the URL to read this page of results;
 * `first` and `last` are URLs for the first and last page of results, which may be the same for only one page;
 * `next` and `previous` are URLs for the next and previous page, should the current page be one of may.
+
+All of these actions respond to the HTTP GET request.
 
 In all cases, the `results` element is an array of matching entries, obeying the same JSON structure as the type of matching item.  If
 there are no matches then, like the singular search, the response will be a not found error.  Note that the `total` element in the JSON
