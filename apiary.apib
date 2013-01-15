@@ -105,11 +105,16 @@ GET /00000000-1111-0000-0000-000000000001
 
 --
 Searching
-Searches are considered a resource that can be created, and hence respond to an HTTP POST request, and can either find one or more tubes.
+Searches are considered a resource that can be created, and hence respond to an HTTP POST request, and can either find one or more of these.
 Regardless of whether a search is for a singular result, or many, the search always expects a `barcode` value to be sent in the body of
 the request.
 
-Searching for an individual tube by barcode will always, if it finds a match, redirect to the appropriate location.
+Searching for an individual resource by barcode will always, if it finds a match, redirect to the appropriate location.
+
+It is very important to note that this search is not centered around tubes: in the real world system there are other types of resources
+that can be searched for by barcode, like plates, hence the returned resource could be anything.  However, note that to actually perform
+this search a physical item must have been scanned, which means that the user interface is likely to say "Scan tube" and therefore the
+application will know that the result is a tube, not a plate.
 --
 POST /search/first
 > Accept: application/json
@@ -148,16 +153,19 @@ POST /search/first
 
 
 --
-Searching for multiple tubes
-When searching for all tubes with a matching barcode, the body of the response is a "page" of results, meaning that it has an `actions`
+Searching for multiple barcoded items
+When searching for all items with a matching barcode, the body of the response is a "page" of results, meaning that it has an `actions`
 element that describes the paging.  The actions that might be present are:
 
 * `read` which is the URL to read this page of results;
 * `first` and `last` are URLs for the first and last page of results, which may be the same for only one page;
 * `next` and `previous` are URLs for the next and previous page, should the current page be one of may.
 
-In all cases, the `tubes` element is an array of tube entries, obeying the same JSON structure as an individual tube.  If there are no
-matches then, like the singular search, the response will be a not found error.
+In all cases, the `results` element is an array of matching entries, obeying the same JSON structure as the type of matching item.  If
+there are no matches then, like the singular search, the response will be a not found error.  Note that the `total` element in the JSON
+is the total number of results, across all pages, not on the page being returned..
+
+Note that, as with a singular search, the results may be of differing types.
 --
 POST /search/all
 > Accept: application/json
@@ -175,19 +183,22 @@ POST /search/all
     "first": "/11111111-0000-0000-0000-000000000000",
     "last": "/11111111-0000-0000-0000-000000000000"
   },
-  "tubes": [
+  "total": 1,
+  "results": [
     {
-      "actions": {
-        "read": "/00000000-1111-0000-0000-0000000000001",
-        "transfer": "/00000000-1111-0000-0000-0000000000001/transfer",
-        "change_state": "/00000000-1111-0000-0000-0000000000001/change_state"
-      },
-      "uuid": "00000000-1111-0000-0000-000000000001",
-      "barcode": "SRC123456",
-      "state": "done",
-      "aliquots": [
-        { "sample": "sample 1", "amount": 100 }
-      ]
+      "tube": {
+        "actions": {
+          "read": "/00000000-1111-0000-0000-0000000000001",
+          "transfer": "/00000000-1111-0000-0000-0000000000001/transfer",
+          "change_state": "/00000000-1111-0000-0000-0000000000001/change_state"
+        },
+        "uuid": "00000000-1111-0000-0000-000000000001",
+        "barcode": "SRC123456",
+        "state": "done",
+        "aliquots": [
+          { "sample": "sample 1", "amount": 100 }
+        ]
+      }
     }
   ]
 }
