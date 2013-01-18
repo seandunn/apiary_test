@@ -128,6 +128,7 @@ POST /search/first
 }
 < 301
 < Location: /00000000-1111-0000-0000-000000000001
+< Access-Control-Allow-Origin: *
 
 
 --
@@ -148,6 +149,7 @@ POST /search/first
 < 404
 < Content-Type: application/json
 < Access-Control-Allow-Origin: *
+
 {
   "error": {
     "message": "Barcode SRC654321 does not appear to exist"
